@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Game, Task
+from rest_framework import generics
+from .serializers import GameSerializer
 
 
 class GameAPI(APIView):
@@ -37,3 +39,9 @@ class GameAPI(APIView):
             "status": "ok",
             "game-id": model.id,
         })
+
+
+class GameListAPI(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
