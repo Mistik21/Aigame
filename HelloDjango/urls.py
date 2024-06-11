@@ -10,7 +10,7 @@ urlpatterns = [
     path('api/auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
     path('api/create-game/', GameAPI.as_view()),
-    path("api/game/<int:pk>", GameListAPI.as_view()),
+    path("api/game/<int:pk>", GameAPIObject.as_view()),
     path("api/game/", GameListAPI.as_view()),
     path("", front, name="front"),
 ]
