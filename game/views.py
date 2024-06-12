@@ -14,7 +14,7 @@ class GameAPI(APIView):
         model = Game(
             title=request.data["name"],
             class_user=request.data["class"],
-            count_checkpoint=request.data["count-checkpoint"],
+            count_checkpoint=len(request.data["count-checkpoint"]),
             status=request.data["status"],
             img=request.data["background"],
             author=request.user,
@@ -23,18 +23,20 @@ class GameAPI(APIView):
             model.save()
         except Exception:
             return Response({"status": "error"})
+        count = 1
         for i in request.data["checkpoint"]:
-            model = request.data["checkpoint"]
-            if model[i]["link"] == "None":
+            model_task = i[count]
+            if model_task["link"] == "None":
                 link = ""
             else:
-                link = model[i]["link"]
-            tasks = Task(task_count=model[i]["task-count"], topic=model[i]["topic"], link=link)
+                link = model_task["link"]
+            tasks = Task(task_count=model_task["task-count"], topic=model_task["topic"], link=link)
             try:
                 tasks.save()
             except Exception:
                 return Response({"status": "error"})
             model.task.add(tasks)
+            count += 1
         return Response({
             "status": "ok",
             "game-id": model.id,
@@ -63,7 +65,7 @@ class FullNameAPIAdd(APIView):
             return Response({
                 "status": "ok"
             })
-        
+
         return Response({
             "status": "error"
         })
