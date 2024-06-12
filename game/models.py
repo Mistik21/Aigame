@@ -17,3 +17,10 @@ class Game(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     users = models.TextField(blank=True)
     checkpoint = models.ManyToManyField(Task)
+
+
+class FullName(models.Model):
+    name = models.CharField(verbose_name='Имя', max_length=40)
+    surname = models.CharField(verbose_name='Фамилия', max_length=40)
+    middle_name = models.CharField(verbose_name='Отчество', max_length=40)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
