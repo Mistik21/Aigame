@@ -1,10 +1,9 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Game, Task
+from .models import Game, Task, FullName
 from rest_framework import generics
-from .serializers import GameSerializer, FullNameSerializer
+from .serializers import GameSerializer
 
 
 class GameAPI(APIView):
@@ -59,13 +58,11 @@ class FullNameAPIAdd(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        serializer = FullNameSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+        model = FullName(FIO_user=request.data["FIO_user"], user=request.user)
+        try:
+            model.save()
             return Response({
-                "status": "ok"
+                "status": "ok",
             })
-
-        return Response({
-            "status": "error"
-        })
+        except Exception:
+            return Response({"status": "error"})

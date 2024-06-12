@@ -21,8 +21,3 @@ class GameSerializer(serializers.ModelSerializer):
         model = Game
         fields = ("title", "class_user", "count_checkpoint", "status", "img", "users", "author", "checkpoint")
 
-
-class FullNameSerializer(ModelSerializer):
-    class Meta:
-        model = FullName
-        fields = '__all__'
