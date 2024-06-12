@@ -1,7 +1,9 @@
 from djoser.serializers import UserSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework.serializers import ModelSerializer
 
+from .models import FullName
 from .models import Game, Task
 
 
@@ -18,3 +20,9 @@ class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ("title", "class_user", "count_checkpoint", "status", "img", "users", "author", "checkpoint")
+
+
+class FullNameSerializer(ModelSerializer):
+    class Meta:
+        model = FullName
+        fields = '__all__'

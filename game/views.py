@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Game, Task
 from rest_framework import generics
-from .serializers import GameSerializer
+from .serializers import GameSerializer, FullNameSerializer
 
 
 class GameAPI(APIView):
@@ -51,3 +51,19 @@ class GameAPIObject(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Game.objects.all()
     serializer_class = GameSerializer
+
+
+class FullNameAPIAdd(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        serializer = FullNameSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "status": "ok"
+            })
+        
+        return Response({
+            "status": "error"
+        })
