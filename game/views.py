@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Game, Task, FullName
+from .models import Game, Task, FullName, Progress
 from rest_framework import generics
 from .serializers import GameSerializer
 
@@ -66,3 +66,27 @@ class FullNameAPIAdd(APIView):
             })
         except Exception:
             return Response({"status": "error"})
+
+
+class ProgressAPIAdd(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        game = Game.objects.get(pk=request.data["id_game"])
+        is_progress = Progress.objects.filter(user=request.user).exists()
+        if is_progress:
+            is_progress = Progress.objects.get(user=request.user)
+            return Response({
+                "checkpoint": is_progress.checkpoint,
+                "task": is_progress.task,
+            })
+        model_progress = Progress(game=game, user=request.user, checkpoint=request.data["checkpoint"],
+                                  task=request.data["task"])
+        try:
+            model_progress.save()
+        except Exception:
+            return Response({"status": "error"})
+        request.user.fullname.progress_game.add(model_progress)
+        return Response({
+            "status": "ok",
+        })

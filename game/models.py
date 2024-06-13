@@ -19,6 +19,15 @@ class Game(models.Model):
     checkpoint = models.ManyToManyField(Task)
 
 
+class Progress(models.Model):
+    checkpoint = models.CharField(max_length=150)
+    task = models.CharField(max_length=150)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+
+
 class FullName(models.Model):
-    FIO_user = models.CharField(verbose_name='Имя', max_length=40)
+    FIO_user = models.CharField(verbose_name='Имя', max_length=200)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    progress_game = models.ManyToManyField(Progress)
+
