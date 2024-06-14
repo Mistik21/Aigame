@@ -28,6 +28,18 @@ class Progress(models.Model):
 
 class FullName(models.Model):
     FIO_user = models.CharField(verbose_name='Имя', max_length=200)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='fio')
     progress_game = models.ManyToManyField(Progress)
 
+    def get_full_info(self):
+        return self
+
+
+class UserFullInfoMixin:
+    def get_full_info(self):
+        try:
+            return self
+        except:
+            return None
+
+User.__bases__ = (UserFullInfoMixin,) + User.__bases__
