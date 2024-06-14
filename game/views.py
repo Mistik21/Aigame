@@ -75,13 +75,27 @@ class ProgressAPIAdd(APIView):
         game = Game.objects.get(pk=request.data["id_game"])
         is_progress = Progress.objects.filter(user=request.user).exists()
         if is_progress:
-            is_progress = Progress.objects.get(user=request.user)
-            return Response({
-                "checkpoint": is_progress.checkpoint,
-                "task": is_progress.task,
-            })
-        model_progress = Progress(game=game, user=request.user, checkpoint=request.data["checkpoint"],
-                                  task=request.data["task"])
+            is_progress = Progress.objects.filter(game=game).get(user=request.user)
+            list_progress = is_progress.progress_user.split(" ")
+            try:
+                list_progress[int(request.data["chckpint"])-1] = request.data["task"]
+            except Exception:
+                return Response({"status": "error"})
+            is_progress.progress_user = " ".join(list_progress)
+            try:
+                is_progress.save()
+                return Response({
+                    "status": "ok"
+                })
+            except Exception:
+                return Response({"status": "error"})
+        task = Task.objects.get(pk=request.data["id_task"])
+        progress_user = ["."] * int(task.task_count)
+        try:
+            progress_user[int(request.data["chckpint"])-1] = request.data["task"]
+        except Exception:
+            return Response({"status": "error"})
+        model_progress = Progress(progress_user=" ".join(progress_user),game=game, user=request.user)
         try:
             model_progress.save()
         except Exception:

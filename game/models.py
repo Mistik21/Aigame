@@ -20,8 +20,7 @@ class Game(models.Model):
 
 
 class Progress(models.Model):
-    checkpoint = models.CharField(max_length=150)
-    task = models.CharField(max_length=150)
+    progress_user = models.TextField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
@@ -30,7 +29,6 @@ class FullName(models.Model):
     FIO_user = models.CharField(verbose_name='Имя', max_length=200)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='fio')
     progress_game = models.ManyToManyField(Progress)
-
     def get_full_info(self):
         return self
 
