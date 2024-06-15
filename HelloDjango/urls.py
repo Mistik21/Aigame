@@ -14,6 +14,7 @@ urlpatterns = [
     path("api/game/", GameListAPI.as_view()),
     path("api/create-fullname/", FullNameAPIAdd.as_view()),
     path("api/create-progress/", ProgressAPIAdd.as_view()),
+    path("api/progress/", ProgressAPILis.as_view()),
     path("", front, name="front"),
 ]
 if settings.DEBUG:
