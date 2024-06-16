@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Game, Task, FullName, Progress
 from rest_framework import generics
 from .serializers import GameSerializer
+from . import Ai_create_game
 
 
 class GameAPI(APIView):
@@ -139,7 +140,21 @@ class ProgressAPILis(APIView):
 
 class FullUserInfoAPI(APIView):
     permission_classes = (IsAuthenticated,)
-    
+
     def get(self, request):
         user = request.user
         return user
+
+
+class CreateTopicAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            resp = Ai_create_game.creat_game(request.data["class_user"], request.data["topic"])
+        except Exception:
+            return Response({"status": "error"})
+        return Response({
+            "task": resp[0],
+            "response_task": resp[1]
+        })
