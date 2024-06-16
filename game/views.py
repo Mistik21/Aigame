@@ -135,3 +135,11 @@ class ProgressAPILis(APIView):
         return Response({
             "progress": lisr_result,
         })
+
+
+class FullUserInfoAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+    
+    def get(self, request):
+        user = request.user
+        return user
