@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Game, Task, FullName, Progress
 from rest_framework import generics
 from .serializers import GameSerializer
+from django.http import HttpRequest
 
 
 class GameAPI(APIView):
@@ -66,6 +67,10 @@ class FullNameAPIAdd(APIView):
             })
         except Exception:
             return Response({"status": "error"})
+        
+    def get_full_user_info(self, request: HttpRequest):
+        user = request.user
+        return user
 
 
 class ProgressAPIAdd(APIView):
