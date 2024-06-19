@@ -16,6 +16,7 @@ urlpatterns = [
     path("api/create-progress/", ProgressAPIAdd.as_view()),
     path("api/progress/", ProgressAPILis.as_view()),
     path("api/crete-task/", CreateTopicAPI.as_view()),
+    path("api/info-user/", FullUserInfoAPI.as_view()),
     path("", front, name="front"),
 ]
 if settings.DEBUG:

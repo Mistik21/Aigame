@@ -142,8 +142,14 @@ class FullUserInfoAPI(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        user = request.user
-        return user
+        Fio_user = FullName.objects.get(user=request.user).FIO_user.split(" ")
+        return Response({
+            "name": Fio_user[1],
+            "surname": Fio_user[0],
+            "login": request.user.username,
+            "email": request.user.email,
+        }
+        )
 
 
 class CreateTopicAPI(APIView):
